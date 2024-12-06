@@ -1,6 +1,8 @@
-let state = 'X';
-let gameState = document.querySelector(".game--status")
-gameState.innerHTML = `It's ${state}'s turn`;
+function loadGame() {
+    state = 'X';
+    gameState.innerHTML = `It's ${state}'s turn`;
+    gameArray = ["","","","","","","","",""] ;
+}
 
 function changeState() {
     if(state === 'X') {
@@ -11,15 +13,32 @@ function changeState() {
     gameState.innerHTML = `It's ${state}'s turn`
 }
 
-function writeTurn(cellIndex) {
-    cells[cellIndex].innerHTML = state;
+function fillCell(element,cellIndex) {
+    if (gameArray[cellIndex] === '') {
+        gameArray[cellIndex] = state;
+        element.innerHTML = state;
+        changeState();
+    }
 }
 
-const cells = document.querySelectorAll(".cell")
-cells.forEach(cell => {
-    cell.addEventListener('click', () => {
-        const cellIndex = cell.getAttribute('data-cell-index');
-        writeTurn(cellIndex);
-        changeState();
-    });
+function restartGame() {
+    document.querySelectorAll(".cell").forEach((cell) => {
+        cell.innerHTML = '';
+    })
+    loadGame();
+}
+
+let state;
+let gameArray;
+let gameState = document.querySelector(".game--status");
+
+loadGame();
+
+const test = document.querySelector(".game--container").addEventListener("click", (event) => {
+    const cell = event.target;
+    const cellIndex = cell.getAttribute("data-cell-index");
+    fillCell(cell,cellIndex);
+    
 })
+
+document.querySelector(".game--restart").addEventListener("click", restartGame);
